@@ -1,5 +1,9 @@
 # An Attempt To Model Drinks Using OOP
 
+from beverages import *
+from garnish import *
+from drinkware import *
+
 
 class Bar:
     pass
@@ -20,24 +24,4 @@ class Drink:
         self.glass = glass
         self.garnishes = garnishes
 
-
-class Beverage:
-    def __init__(self, amount : int):
-        self.amount = amount
-
-
-class Glass:
-    pass
-
-
-class Garnish:
-    pass
-
-
-class Bottle:
-    pass
-
-
-class Keg:
-    pass
 

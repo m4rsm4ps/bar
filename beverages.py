@@ -2,15 +2,18 @@ from enum import Enum
 
 
 class Beverage:
-    def __init__(self, brand: str, variety: str, amount : int | None = None):
+    def __init__(self, brand: str, variety: str, amount: int | None = None):
         self.amount = amount
         self.brand = brand
         self.variety = variety
 
+    def get_amount(self):
+        return self.amount
+
 
 class Whiskey(Beverage):
 
-    class Origin(Enum):
+    class Provenance(Enum):
         SCT = "Scotch"
         IRS = "Irish"
         BRB = "Bourbon"
@@ -36,26 +39,73 @@ class Whiskey(Beverage):
         PSW = "Pot Still Whiskey"
         NTW = "Not Technically Whiskey"
 
-    def __init__(self, brand: str, variety: str, origin: Origin, mash_bill: MashBill, amount: int | None = None):
+    def __init__(self, brand: str, variety: str, provenance: Provenance, mash_bill: MashBill, amount: int | None = None):
         super().__init__(brand, variety, amount)
-        self.origin = origin
+        self.provenance = provenance
         self.mash_bill = mash_bill
 
+    def __repr__(self):
+        return (
+            f"Whiskey(brand={self.brand}, variety={self.variety}, provenance={self.provenance}, "
+            f"mash_bill={self.mash_bill}{', amount=' + str(self.amount) if self.amount else ''})"
+        )
+
     def __str__(self):
-        if self.origin in (Whiskey.Origin.BRB, Whiskey.Origin.TNS):
+        if self.provenance in (Whiskey.Provenance.BRB, Whiskey.Provenance.TNS):
             details = self.mash_bill.value
         else:
-            details = f"{self.origin.value} {self.mash_bill.value}"
+            details= f"{self.provenance.value} {self.mash_bill.value}"
         return f"{self.brand} {self.variety} ({details})"
 
 
+class Fresh(Beverage):
 
-if __name__ == "__main__":
-    jack_daniels_old_no_7 = Whiskey(
-        brand = "Jack Daniel's",
-        variety = "Old No.7",
-        origin = Whiskey.Origin.TNS,
-        mash_bill = Whiskey.MashBill.TNS
-    )
+    class SourceCrop(Enum):
+        LIME = "Fresh Lime Juice"
+        LEMON = "Fresh Lemon Juice"
+
+    def __init__(self, brand: str, variety: str, source_crop: SourceCrop, amount: int | None = None):
+        super().__init__(brand, variety, amount)
+        self.crop = crop
+
+        def __repr__(self):
+            return f"Fresh(brand={self.brand}, variety={self.variety}, source_crop={self.source_crop})"
+
+        def __str__(self):
+            return f"{self.brand} {self.variety} ({self.source_crop.value})"
+
+
+class Syrup(Beverage):
+    def __init__(self, brand: str, variety: str, amount: int | None = None):
+        super().__init__(brand, variety, amount)
+
+        def __repr__(self):
+            return f"Syrup(brand={self.brand}, variety={self.variety}"
+
+        def __str__(self):
+            return f"{self.brand} {self.variety}"
+
+
+class Foamer(Beverage):
+
+    class Origin(Enum):
+        VEGAN = "Synthesized or Pland-based Foamer"
+        NONVEG = "Animal-derived Foamer"
+
+    def __init__(self, brand: str, variety: str, origin: Origin, amount: int | None = None):
+        super().__init__(brand, variety, amount)
+        self.origin = origin
+
+        def __repr__(self):
+            return f"Foamer(brand={self.brand}, variety={self.variety} origin={self.origin})"
+
+        def __str__(self):
+            return f"{self.brand} {self.variety} ({self.origin})"
+
+
+
+
+
+
 
 
