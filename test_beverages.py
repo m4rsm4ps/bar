@@ -1,6 +1,6 @@
 import unittest
 
-from beverages import Whiskey
+from beverages import *
 
 
 class TestWhiskey(unittest.TestCase):

@@ -18,7 +18,7 @@ class Drink:
         self,
         beverages : list[Beverage],
         glass : Glass | Bottle,
-        garnishes : list[Garnishes] | None = None
+        garnishes : list[Garnish] | None = None
     ):
         self.beverages = beverages
         self.glass = glass

@@ -33,7 +33,7 @@ class Whiskey(Beverage):
         BLW = "Blended Whiskey"
         BRB = "Bourbon"
         RYE = "Rye Whiskey"
-        WHW = "Wheat Whiskey"
+        WTW = "Wheat Whiskey"
         CRW = "Corn Whiskey"
         TNS = "Tennessee Whiskey"
         PSW = "Pot Still Whiskey"
@@ -68,22 +68,23 @@ class Fresh(Beverage):
         super().__init__(brand, variety, amount)
         self.crop = crop
 
-        def __repr__(self):
-            return f"Fresh(brand={self.brand}, variety={self.variety}, source_crop={self.source_crop})"
+    def __repr__(self):
+        return f"Fresh(brand={self.brand}, variety={self.variety}, source_crop={self.source_crop})"
 
-        def __str__(self):
-            return f"{self.brand} {self.variety} ({self.source_crop.value})"
+    def __str__(self):
+        return f"{self.brand} {self.variety} ({self.source_crop.value})"
 
 
 class Syrup(Beverage):
+
     def __init__(self, brand: str, variety: str, amount: int | None = None):
         super().__init__(brand, variety, amount)
 
-        def __repr__(self):
-            return f"Syrup(brand={self.brand}, variety={self.variety}"
+    def __repr__(self):
+        return f"Syrup(brand={self.brand}, variety={self.variety}"
 
-        def __str__(self):
-            return f"{self.brand} {self.variety}"
+    def __str__(self):
+        return f"{self.brand} {self.variety}"
 
 
 class Foamer(Beverage):
