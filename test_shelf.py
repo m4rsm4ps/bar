@@ -32,22 +32,16 @@ class TestShelf(unittest.TestCase):
         bottle = shlf.take_bottle("Monkey Shoulder The Original (Scotch Blended Malt Whiskey)")
         self.assertEqual(shlf.whiskeys["Monkey Shoulder The Original (Scotch Blended Malt Whiskey)"]["count"], 2)
         # test if bottle contents amount decrements correctly when pouring
-        #print(id(bottle), id(shlf.whiskeys[bottle.label]["item"]), "000000000000000")
         initial_amount = bottle.contents.amount
         bottle.pour(50)
-        print(shlf.whiskeys[bottle.label]["item"].contents.amount,
-              id(shlf.whiskeys[bottle.label]["item"].contents),
-              id(shlf.whiskeys[bottle.label]["item"]),
-              "--",
-              bottle.contents.amount,
-              id(bottle.contents),
-              id(bottle),
-              "|||||||||||||||||||||||||||||||||||||||||")
         self.assertEqual(bottle.contents.amount, initial_amount - 50)
         # test if shelving a poured bottle remembers bottle contents amount
         shlf.shelf_bottle(bottle)  # also testing a default value for 'bottle_count' argument of class 'Bottle'
         self.assertEqual(shlf.whiskeys[bottle.label]["item"].contents.amount, initial_amount - 50)
-
+        # test if raise ValueError in Shelf.shelf_bottle() works as expected
+        bad_bottle = Bottle(700, Whiskey(bvrg.brand, bvrg.variety, bvrg.provenance, bvrg.mash_bill, 200))
+        with self.assertRaises(ValueError):
+            shlf.shelf_bottle(bad_bottle)
 
 
 

@@ -38,7 +38,6 @@ class Shelf:
             category = self.syrups
         elif isinstance(bottle.contents, Foamer):
             category = self.foamers
-
         if not category:
             category[bottle.label] = {"item": bottle, "count": bottle_count}
         else:

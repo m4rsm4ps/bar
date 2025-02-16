@@ -17,7 +17,7 @@ class Bottle(Vessel):
 
     def __init__(self, volume: int, contents: Beverage | None) -> None:
         super().__init__(volume, contents)
-        if self.contents:
+        if self.contents and not self.contents.amount:
             self.contents.amount = self.volume
 
     @property
