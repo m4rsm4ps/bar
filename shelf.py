@@ -24,49 +24,80 @@ foamers = [
 class Shelf:
 
     def __init__(self) -> None:
-        self.whiskeys = {}
-        self.freshes = {}
-        self.syrups = {}
-        self.foamers = {}
+        self.shelved = {}
 
-    def shelf_bottle(self, bottle: Bottle, bottle_count: int = 1) -> None:
-        if isinstance(bottle.contents, Whiskey):
-            category = self.whiskeys
-        elif isinstance(bottle.contents, Fresh):
-            category = self.freshes
-        elif isinstance(bottle.contents, Syrup):
-            category = self.syrups
-        elif isinstance(bottle.contents, Foamer):
-            category = self.foamers
-        if not category:
-            category[bottle.label] = {"item": bottle, "count": bottle_count}
-        else:
-            if bottle.contents.amount < bottle.volume:
-                if category[bottle.label]["item"].contents.amount < bottle.volume:
-                    raise ValueError("Bottle on Shelf and Bottle in Hand are both not full!")
-                del category[bottle.label]["item"]
-                category[bottle.label]["item"] = bottle
-            category[bottle.label]["count"] += 1
+    def shelf_bottle(self, bottle: Bottle , bottle_count: int = 1) -> None:
+        if not bottle.label in self.shelved:
+            self.shelved[bottle.label] = {
+                "specs": {"type": type(bottle.contents), "properties": bottle.get_contents_stock_props()}
+            }
+        if bottle.sealed:
+            try:
+                self.shelved[bottle.label]["sealed"] += bottle_count
+            except (KeyError, TypeError):
+                self.shelved[bottle.label]["sealed"] = bottle_count
+        elif not bottle.sealed:
+            if bottle_count > 1:
+                raise ValueError("Shelving several unsealed bottles is not allowed!")
+            try:
+                ready = self.shelved[bottle.label]["ready"]
+                if not ready.sealed:  #AttributeError here if ready is None?
+                    raise ValueError("Shelving several unsealed bottles is not allowed!")
+                del self.shelved[bottle.label]["ready"]
+                self.shelved[bottle.label]["sealed"] += 1
+            except (KeyError, AttributeError):
+                pass
+            self.shelved[bottle.label]["ready"] = bottle
 
     def take_bottle(self, label: str) -> Bottle:
-        shelf_contents = self.__dict__.values()
-        for category in shelf_contents:
-            if label in category.keys():
-                bottle = category[label]["item"]
-                category[label]["count"] -= 1
-            if category[label]["count"] == 0:
-                del category[label]
-            else:
-                contents_props = bottle.contents.__dict__
-                contents_props["amount"] = bottle.volume
-                category[label]["item"] = Bottle(
-                    bottle.volume,
-                    type(bottle.contents)(**contents_props)
-                )
-            return bottle
+        if not label in self.shelved:
+            raise ValueError("Invalid item name.")
+        if not self.shelved[label].get("ready"):
+            if not self.shelved[label].get("sealed"):
+                raise ValueError(f"Not enough {label} on the shelf.")
+            beverage = self.shelved[label]["specs"]
+            beverage = beverage["type"](**beverage["properties"])
+            new_sealed_bottle = Bottle(beverage.amount, beverage)
+            self.shelved[label]["sealed"] = (
+                None
+                if self.shelved[label]["sealed"] - 1 == 0
+                else self.shelved[label]["sealed"] - 1
+            )
+            self.shelved[label]["ready"] = new_sealed_bottle
+        bottle = self.shelved[label]["ready"]
+        self.shelved[label]["ready"] = None
+        return bottle
 
+    def list_all_items(self) -> list[tuple]:
+        res = []
+        for label in self.shelved:
+            millilitres = self.get_mL(label)
+            try:
+                sealed = int(self.shelved[label].get("sealed"))
+            except TypeError:
+                sealed = 0
+            bottle_count = sealed if not self.shelved[label].get("ready") else sealed + 1
+            res.append((label, bottle_count, millilitres))
+        return res
 
+    def get_mL(self, label: str) -> int:
+        try:
+            label = self.shelved[label]
+        except KeyError:
+            raise ValueError("Invalid item name.")
+        ready, sealed = label.get("ready"), label.get("sealed")
+        if not ready:
+            ready = 0
+        else:
+            ready = ready.contents.amount
+        if not sealed:
+            sealed = 0
+        else:
+            sealed = sealed * label["specs"]["properties"]["amount"]
+        return ready + sealed
 
+    def get_litres(self, label):
+        return self.get_mL(label) / 1000
 
 
 

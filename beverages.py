@@ -10,6 +10,9 @@ class Beverage:
     def get_amount(self):
         return self.amount
 
+    def get_properties(self):
+        pass
+
 
 class Whiskey(Beverage):
 
@@ -56,6 +59,14 @@ class Whiskey(Beverage):
         else:
             details= f"{self.provenance.value} {self.mash_bill.value}"
         return f"{self.brand} {self.variety} ({details})"
+
+    def get_properties(self):
+        return dict(
+            brand=self.brand,
+            variety=self.variety,
+            provenance=self.provenance,
+            mash_bill=self.mash_bill
+        )
 
 
 class Fresh(Beverage):
