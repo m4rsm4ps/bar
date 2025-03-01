@@ -25,6 +25,10 @@ class Bottle(Vessel):
     def label(self):
         return f"{str(self.contents)} {self.volume} mL"
 
+    def open(self):
+        self.sealed = False
+        #print(f"{telf.label} bottle was opened.")
+
     def pour(self, amount: int) -> Beverage:
         if self.sealed:
             raise AttributeError("The Bottle is sealed, cannot pour!")
@@ -34,15 +38,11 @@ class Bottle(Vessel):
         return type(self.contents)(**self.contents.get_properties(), amount=amount)
 
     def pour_in(self, beverage:Beverage, amount: int) -> None:
-        if not isinstance(beverage, type(self.contents)):
+        if beverage.get_properties() != self.contents.get_properties():
             raise ValueError("Mixing beverages in Bottle is not allowed!")
-        if self.content.amount + amount > self.volume:
+        if self.contents.amount + amount > self.volume:
             raise ValueError("Contents amount cannot exceed volume of Bottle!")
         self.contents.amount += amount
-
-    def open(self):
-        self.sealed = False
-        #print(f"{telf.label} bottle was opened.")
 
     def get_contents_stock_props(self):
         beverage_props = self.contents.get_properties()
