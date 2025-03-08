@@ -10,13 +10,13 @@ class TestBottle(unittest.TestCase):
             "Monkey Shoulder",
             "The Original",
             Whiskey.Provenance.SCT,
-            Whiskey.MashBill.BMW
+            Whiskey.Style.BMW
         )
         self.jack_daniels = Whiskey(
             "Jack Daniel's",
             "Old No.7",
             Whiskey.Provenance.TNS,
-            Whiskey.MashBill.TNS
+            Whiskey.Style.STR
         )
 
     def test_new_bottle_is_sealed_and_full(self):
@@ -30,7 +30,7 @@ class TestBottle(unittest.TestCase):
         jack_bottle = Bottle(1000, self.jack_daniels)
         self.assertEqual(
             jack_bottle.label,
-            "Jack Daniel's Old No.7 (Tennessee Whiskey) 1000 mL"
+            "Jack Daniel's Old No.7 (Straight Tennessee Whiskey) 1000 mL"
         )
 
     def test_open(self):
@@ -71,7 +71,8 @@ class TestBottle(unittest.TestCase):
                 "brand": "Jack Daniel's",
                 "variety": "Old No.7",
                 "provenance": Whiskey.Provenance.TNS,
-                "mash_bill": Whiskey.MashBill.TNS,
+                "style": Whiskey.Style.STR,
+                "abv": 40,
                 "amount": 1000
             }
         )

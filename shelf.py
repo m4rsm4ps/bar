@@ -5,7 +5,7 @@ from beverages import *
 
 
 whiskeys = [
-    ("Monkey Shoulder", "The Original", Whiskey.Provenance.SCT, Whiskey.MashBill.BMW),
+    ("Monkey Shoulder", "The Original", Whiskey.Provenance.SCT, Whiskey.Style.BMW),
 ]
 
 freshes = [
