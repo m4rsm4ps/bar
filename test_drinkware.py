@@ -6,17 +6,16 @@ from beverages import *
 
 class TestBottle(unittest.TestCase):
     def setUp(self):
-        self.monkey_shoulder = Whiskey(
+        self.monkey_shoulder = Scotch(
             "Monkey Shoulder",
             "The Original",
-            Whiskey.Provenance.SCT,
-            Whiskey.Style.BMW
+            Scotch.Style.BDM
         )
         self.jack_daniels = Whiskey(
             "Jack Daniel's",
             "Old No.7",
-            Whiskey.Provenance.TNS,
-            Whiskey.Style.STR
+            "Tennessee Whiskey",
+            "Tennessee, US"
         )
 
     def test_new_bottle_is_sealed_and_full(self):
@@ -30,7 +29,7 @@ class TestBottle(unittest.TestCase):
         jack_bottle = Bottle(1000, self.jack_daniels)
         self.assertEqual(
             jack_bottle.label,
-            "Jack Daniel's Old No.7 (Straight Tennessee Whiskey) 1000 mL"
+            "Jack Daniel's Old No.7 (Tennessee Whiskey, Tennessee, US) 1000 mL"
         )
 
     def test_open(self):
@@ -70,8 +69,8 @@ class TestBottle(unittest.TestCase):
             {
                 "brand": "Jack Daniel's",
                 "variety": "Old No.7",
-                "provenance": Whiskey.Provenance.TNS,
-                "style": Whiskey.Style.STR,
+                "style": "Tennessee Whiskey",
+                "provenance": "Tennessee, US",
                 "abv": 40,
                 "amount": 1000
             }

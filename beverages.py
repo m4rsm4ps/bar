@@ -42,6 +42,7 @@ class Fermented(Beverage):
 
 class Spirit(Fermented):
 
+    #xi nastupni dva Enum-klasy – na maibutnee
     class DistillType(Enum):
         PTS = "Pot Still Distillation"
         CLS = "Column Still Distillation"
@@ -57,63 +58,32 @@ class Spirit(Fermented):
     def __init__(self, brand: str, variety: str, abv: float | int, amount: int | None = None):
         super().__init__(brand, variety, abv, amount)
 
+
 class Whiskey(Spirit):
-
-    class Provenance(Enum):
-        SCT = "Scotch"
-        IRS = "Irish"
-        BRB = "Bourbon"
-        TNS = "Tennessee"
-        CND = "Canadian"
-        USA = "US"  # if not Bourbon or Tennessee ?
-        IND = "Indian"
-        AUS = "Australian"
-        JAP = "Japanese"
-        TAI = "Taiwanese"
-        GRM = "German"
-
-    class Style(Enum):
-        SMW = "Single Malt"
-        SGW = "Single Grain"
-        BMW = "Blended Malt"
-        BGW = "Blended Grain"
-        BLW = "Blended"
-        GRW = "Grain"
-        SPS = "Single Pot Still"
-        STR = "Straight"
-        RYE = "Rye"  # for "Canadian Rye"
-        SRY = "Straight Rye"
-        SBR = "Single Barrel Rye"
-        WHT = "Wheatened"
-        SNB = "Single Barrel"
-        CSK = "Cask Strength"
 
     def __init__(self,
                  brand: str,
                  variety: str,
-                 provenance: Provenance,
-                 style: Style,
+                 style: str | None = None,
+                 provenance: str | None = None,
                  abv: float | int = 40,
                  amount: int | None = None):
-        super().__init__(brand, variety, abv, amount)
-        self.base_substrate = Whiskey.Base.GRN
-        self.provenance = provenance
+        super().__init__(brand=brand, variety=variety, abv=abv, amount=amount)
+        self.base_substrate = Spirit.Base.GRN
         self.style = style
+        self.provenance = provenance
 
     def __repr__(self):
         return (
-            f"Whiskey(brand={self.brand}, variety={self.variety}, provenance={self.provenance}, "
-            f"style={self.style}, abv={self.abv}{', amount=' + str(self.amount) if self.amount else ''})"
+            f"Whiskey(brand={self.brand}, variety={self.variety}"
+            f"{', style=' + self.style if self.style else ''}, abv={self.abv}"
+            f"{', provenance=' + str(self.provenance) if self.provenance else ''}" 
+            f"{', amount=' + str(self.amount) if self.amount else ''})"
         )
 
     def __str__(self):
-        if self.provenance is Whiskey.Provenance.BRB:
-            details = f"{self.style.value} {self.provenance.value}"
-        elif self.provenance is Whiskey.Provenance.CND and self.style is Whiskey.Style.RYE:
-            details = f"{self.provenance.value} {self.style.value}"
-        else:
-            details = f"{self.style.value} {self.provenance.value} Whiskey"
-        return f"{self.brand} {self.variety} ({details})"
+        details = ", ".join([d for d in (self.style, self.provenance) if d is not None])
+        return f"{self.brand} {self.variety}{' (' + details + ')' if details else ''}"
 
     def get_properties(self):
         return dict(
@@ -123,6 +93,64 @@ class Whiskey(Spirit):
             style=self.style,
             abv=self.abv
         )
+
+
+class Scotch(Whiskey):
+    class Style(Enum):
+        SNM = "Single Malt"
+        SNG = "Single Grain"
+        BDM = "Blended Malt"
+        BDG = "Blended Grain"
+        BLD = "Blended"
+
+    def __init__(self,
+                 brand: str,
+                 variety: str,
+                 style: Style,
+                 provenance: str | None = "Scotland",
+                 abv: float | int = 40,
+                 amount: int | None = None):
+        if provenance not in (None, "Scotland"):
+            raise ValueError("Scotch is supposed to be from Scotland")
+        super().__init__(brand=brand, variety=variety, abv=abv, amount=amount)
+        self.provenance = "Scotland"
+        self.style = style
+    def __repr__(self):
+        return (
+            f"Scotch(brand={self.brand}, variety={self.variety}, provenance={self.provenance}, "
+            f"style={self.style}, abv={self.abv}{', amount=' + str(self.amount) if self.amount else ''})"
+        )
+
+    def __str__(self):
+        details = f"{self.style.value} Scotch Whisky"
+        return f"{self.brand} {self.variety} ({details})"
+
+
+class Irish(Whiskey):
+    class Style(Enum):
+        SNM = "Single Malt"
+        SNP = "Single Pot Still"
+        BDG = "Single Grain"
+        BLD = "Blended"
+        RSH = "Irish"
+    pass
+
+class Bourbon(Whiskey):
+    class Style(Enum):
+        TRD = "Traditional"
+        HGR = "High-Rye"
+        STR = "Straight"
+        WHT = "Wheatened"
+        SNB = "Single Barrel"
+        CSK = "Cask Strength"
+        BNB = "Bottle-In-Bond"
+        BLN = "Blended"
+        SMB = "Small Batch"
+    pass
+
+
+class Rye(Whiskey):
+    pass
 
 
 class Fresh(Beverage):

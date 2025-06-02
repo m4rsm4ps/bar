@@ -8,17 +8,16 @@ class TestWhiskey(unittest.TestCase):
         j_dan_old_no7 = Whiskey(
             brand = "Jack Daniel's",
             variety = "Old No.7",
-            provenance = Whiskey.Provenance.TNS,
-            style = Whiskey.Style.STR
+            provenance = "Tennessee, US",
+            style = "Straight Tennessee Whiskey"
         )
-        self.assertEqual(str(j_dan_old_no7), "Jack Daniel's Old No.7 (Straight Tennessee Whiskey)")
-        monkeyshoulder = Whiskey(
+        self.assertEqual(str(j_dan_old_no7), "Jack Daniel's Old No.7 (Straight Tennessee Whiskey, Tennessee, US)")
+        monkeyshoulder = Scotch(
             brand = "Monkey Shoulder",
             variety = "The Original",
-            provenance = Whiskey.Provenance.SCT,
-            style = Whiskey.Style.BMW
+            style = Scotch.Style.BDM
         )
-        self.assertEqual(str(monkeyshoulder), "Monkey Shoulder The Original (Blended Malt Scotch Whiskey)")
+        self.assertEqual(str(monkeyshoulder), "Monkey Shoulder The Original (Blended Malt Scotch Whisky)")
 
 
 class TestFermented(unittest.TestCase):

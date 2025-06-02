@@ -3,24 +3,6 @@
 from drinkware import Bottle
 from beverages import *
 
-
-whiskeys = [
-    ("Monkey Shoulder", "The Original", Whiskey.Provenance.SCT, Whiskey.Style.BMW),
-]
-
-freshes = [
-    ("Housemade", "Genuine", Fresh.SourceCrop.LEMON),
-]
-
-syrups = [
-    ("Housemade", "Sugar Syrup")
-]
-
-foamers = [
-    ("Foam Mix", "...", Foamer.Origin.VEGAN),
-]
-
-
 class Shelf:
 
     def __init__(self) -> None:

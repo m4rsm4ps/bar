@@ -7,7 +7,7 @@ from shelf import Shelf
 
 class TestShelf(unittest.TestCase):
     def setUp(self):
-        self.beverage = Whiskey("Monkey Shoulder", "The Original", Whiskey.Provenance.SCT, Whiskey.Style.BMW)
+        self.beverage = Scotch("Monkey Shoulder", "The Original", Scotch.Style.BDM)
         self.bottle = Bottle(700, self.beverage)
 
     def test_shelf_bottle(self):
@@ -102,7 +102,7 @@ class TestShelf(unittest.TestCase):
         self.bottle.open()
         self.bottle.pour(334)
         shelf.shelf_bottle(self.bottle)
-        another = Bottle(1000, Whiskey("Jack Daniel's", "Old No.7", Whiskey.Provenance.TNS, Whiskey.Style.STR))
+        another = Bottle(1000, Whiskey("Jack Daniel's", "Old No.7", "Tennessee Whiskey", "Tennessee, US"))
         shelf.shelf_bottle(another, 2)
         another.open()
         another.pour(975)
@@ -110,8 +110,8 @@ class TestShelf(unittest.TestCase):
         self.assertListEqual(
             shelf.list_all_items(),
             [
-                ("Monkey Shoulder The Original (Blended Malt Scotch Whiskey) 700 mL", 10, 6666),
-                ("Jack Daniel's Old No.7 (Straight Tennessee Whiskey) 1000 mL", 3, 2025)
+                ("Monkey Shoulder The Original (Blended Malt Scotch Whisky) 700 mL", 10, 6666),
+                ("Jack Daniel's Old No.7 (Tennessee Whiskey, Tennessee, US) 1000 mL", 3, 2025)
             ]
         )
 
